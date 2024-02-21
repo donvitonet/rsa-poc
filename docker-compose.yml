@@ -1,0 +1,17 @@
+version: "3.5"
+services:
+  rsa-poc:
+    image: "node:18-alpine"
+    user: "node"
+    working_dir: /home/node/app
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./:/home/node/app
+    expose:
+      - "8081"
+    ports:
+      - "8001:8001"
+    command: "npm start"
+    stdin_open: true
+    tty: true
