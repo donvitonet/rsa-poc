@@ -2,10 +2,10 @@ import { constants, generateKeyPairSync, privateDecrypt, publicEncrypt, sign, ve
 import { existsSync, readFileSync, writeFileSync } from 'fs';
 
 export function getKeyPair() {
-  if (existsSync('./rsa.pub')) {
+  if (existsSync('./keys/rsa.pub')) {
     return {
-      publicKey: readFileSync('./rsa.pub'),
-      privateKey: readFileSync('./rsa')
+      publicKey: readFileSync('./keys/rsa.pub'),
+      privateKey: readFileSync('./keys/rsa')
     }
   }
 
@@ -14,19 +14,19 @@ export function getKeyPair() {
     modulusLength: 2048
   });
 
-  writeFileSync('./rsa.pub', publicKey.export({
+  writeFileSync('./keys/rsa.pub', publicKey.export({
     type: "pkcs1",
     format: "pem",
   }));
 
-  writeFileSync('./rsa', privateKey.export({
+  writeFileSync('./keys/rsa', privateKey.export({
     type: "pkcs1",
     format: "pem",
   }));
 
   return {
-    publicKey: readFileSync('./rsa.pub'),
-    privateKey: readFileSync('./rsa')
+    publicKey: readFileSync('./keys/rsa.pub'),
+    privateKey: readFileSync('./keys/rsa')
   };
 };
 
