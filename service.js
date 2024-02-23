@@ -18,14 +18,14 @@ export function exportKey(keyObject) {
   })
 }
 
-export function getEncryptedData(publicKey) {
+export function getEncryptedData({ data, publicKey }) {
   return publicEncrypt(
     {
       key: publicKey,
       padding: constants.RSA_PKCS1_PADDING,
       oaepHash: "sha256",
     },
-    Buffer.from('my secret data')
+    Buffer.from(data)
   );
 }
 

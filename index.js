@@ -1,8 +1,8 @@
 import { decryptData, getEncryptedData, getKeyPair, mySign, verifySignature } from "./service.js";
 
 const { privateKey, publicKey } = getKeyPair();
-const encryptedData = getEncryptedData(publicKey);
-const decryptedData = decryptData({ privateKey, data: encryptedData })
+const encryptedData = getEncryptedData({ data: 'my secret data', publicKey });
+const decryptedData = decryptData({ data: encryptedData, privateKey })
 console.log('Decrypted Data:', decryptedData);
 
 const verifiableData = "this need to be verified"
