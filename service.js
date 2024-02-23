@@ -1,54 +1,32 @@
 import { constants, generateKeyPairSync, privateDecrypt, publicEncrypt, sign, verify } from 'crypto';
-import { existsSync, readFileSync, writeFileSync } from 'fs';
 
 export function getKeyPair() {
-  if (existsSync('./keys/rsa.pub')) {
-    return {
-      publicKey: readFileSync('./keys/rsa.pub'),
-      privateKey: readFileSync('./keys/rsa')
-    }
-  }
-
-
   const { publicKey, privateKey } = generateKeyPairSync('rsa', {
     modulusLength: 2048
   });
 
-  writeFileSync('./keys/rsa.pub', publicKey.export({
-    type: "pkcs1",
-    format: "pem",
-  }));
-
-  writeFileSync('./keys/rsa', privateKey.export({
-    type: "pkcs1",
-    format: "pem",
-  }));
-
   return {
-    publicKey: readFileSync('./keys/rsa.pub'),
-    privateKey: readFileSync('./keys/rsa')
+    publicKey: exportKey(publicKey),
+    privateKey: exportKey(privateKey)
   };
 };
 
+export function exportKey(keyObject) {
+  return keyObject.export({
+    type: 'pkcs1',
+    format: 'pem'
+  })
+}
+
 export function getEncryptedData(publicKey) {
-  if (existsSync('./encrypted_data')) {
-    return readFileSync('./encrypted_data');
-  }
-
-  const data = "my secret data";
-
-  const encryptedData = publicEncrypt(
+  return publicEncrypt(
     {
       key: publicKey,
       padding: constants.RSA_PKCS1_PADDING,
       oaepHash: "sha256",
     },
-    Buffer.from(data)
+    Buffer.from('my secret data')
   );
-
-  writeFileSync('./encrypted_data', encryptedData);
-
-  return readFileSync('./encrypted_data');
 }
 
 export function decryptData({ data, privateKey }) {
